@@ -21,6 +21,7 @@ largest_prime:
     addiu $s0, $a0, 0               # store n
 lp_loop1:                           # init array
     sll $t2, $t1, 2                 # get array offset (i * 4)
+    addu $t2, $t2, $s1              # add offset to stack pointer address
     sw $t1, 0($t2)                  # primes[i] = i
     addiu $t1, $t1, 1               # i += 1
     bne $t1, $a0, lp_loop1          # restart loop if i != n
@@ -33,6 +34,7 @@ lp_loop2:                           # filter non-prime numbers
     slt $t5, $v0, $s0               # mul(p,p) < n
     beq $t5, $zero, lp_loop2_end    # loop ends
     sll $t2, $t1, 2                 # get array offset
+    addu $t2, $t2, $s1              # add offset to stack pointer address
     bne $t1, $zero, lp_loop2
     addiu $t3, $zero, 2             # i = 2
 lp_loop2_1:
