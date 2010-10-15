@@ -44,13 +44,13 @@ lp_loop2_1:
     bne $t5, $zero, lp_loop2_end # if (idx>=n) break
     sw $zero, 0($t4)          # primes[idx] = 0
     addiu $t3, $t3, 1         # i++
-    j lp_loop_2_1  # restart while loop
+    j lp_loop2_1              # restart while loop
 lp_loop2_end:
     subiu $t1, $s0, 1         # i = n-1
 lp_loop3:
     slti $t2, $t1, 2          # i < 2
     bne $t2, $zero, lp_loop3_end
-    slt $t3, $t2, 2
+    slti $t3, $t2, 2
     lw $t4, 0($t3)
     beq $t4, $zero, lp_loop3_break  # if (!primes[i]) return
     subiu $t1, $t1, 1         # i--
