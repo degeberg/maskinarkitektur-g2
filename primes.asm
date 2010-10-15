@@ -1,69 +1,102 @@
-main:
-    addiu $a0, $zero, 28      # set n = 28
-    jal largest_prime         # call largest_prime(n)
-    j exit                    # exit program
+init:
+    addiu   $sp, $zero, -1                  # initialize stack
+    jal     main                            # call main
+init_loop:
+    j       init_loop                       # infinite loop
 
 mul:
-    addiu $v0, $zero, 0             # res = 0
+    ori     $v0, $zero, 0                   # res = 0
+mul_loop_init:
+    slt     $a2, $zero, $a0                 # b > 0?
+    beq     $a2, $zero, mul_exit            # if(b > 0) goto mul_exit
 mul_loop:
-    beq $a1, $zero, mul_exit        # exit loop if b == 0
-    addu $v0, $v0, $a0              # res += a
-    subiu $a1, $a1, 1               # b -= 1
-    j mul_loop                      # restart loop
+    addu    $v0, $v0, $a0                   # res += a
+    subiu   $a1, $a1, 1                     # b--
+    bne     $a1, $zero, mul_loop            # if(b != 0) goto mul_loop
 mul_exit:
-    jr $ra                          # return to caller
+    jr      $ra                             # return
 
 largest_prime:
-    addiu $s1, $sp, 0               # save stack pointer
-    sll $t2, $a0, 2                 # calculate required memory on the stack (n*4)
-    subu $sp, $sp, $a0              # adjust stack pointer to make room for primes array
-    addiu $t1, $zero, 2             # set i = 2
-    addiu $s0, $a0, 0               # store n
-lp_loop1:                           # init array
-    sll $t2, $t1, 2                 # get array offset (i * 4)
-    addu $t2, $t2, $s1              # add offset to stack pointer address
-    sw $t1, 0($t2)                  # primes[i] = i
-    addiu $t1, $t1, 1               # i += 1
-    bne $t1, $a0, lp_loop1          # restart loop if i != n
-    # loop1 done...
-    addiu $t1, $zero, 2             # set p = 2
-lp_loop2:                           # filter non-prime numbers
-    addu $a0, $t1, $zero            # set param, p
-    addu $a1, $t1, $zero            # set param, p
-    jal mul                         # call mul(p,p)
-    slt $t5, $v0, $s0               # mul(p,p) < n
-    beq $t5, $zero, lp_loop2_end    # loop ends
-    sll $t2, $t1, 2                 # get array offset
-    addu $t2, $t2, $s1              # add offset to stack pointer address
-    bne $t1, $zero, lp_loop2
-    addiu $t3, $zero, 2             # i = 2
+# int largest_prime(int n)
+# Finds largest prime less than n using the Sieve of Eratosthenes
+    addiu   $sp, $sp, -4                    # make room to save 4 32-bit words
+    sw      $s2, 3($sp)                     # save $s2 on stack, $s2 = p
+    sw      $s1, 2($sp)                     # save $s1 on stack, $s1 = i
+    sw      $s0, 1($sp)                     # save $s0 on stack, $s0 = n
+    sw      $ra, 0($sp)                     # save return address
+    ori     $s0, $a0, 0                     # save n in $s0
+    subu    $sp, $sp, $s0                   # adjust stack pointer to
+                                            # make room for primes array
+
+    slt     $t0, $s0, 3                     # n <= 2?
+    beq     $t0, $zero, lp_return_zero      # if(n <= 2) return 0
+
+# Loop 1, set primes[i] = i, for 2 <= i < n
+    ori     $s1, $zero, 2                   # i = 2
+lp_loop1:
+    addu    $t0, $s1, $sp                   # Address for primes[i]
+    sw      $t0, 0($t0)                     # primes[i] = i
+    addiu   $s1, $s1, 1                     # i += 1
+    bne     $s0, $s1, lp_loop1              # if(n != 0) goto lp_loop1
+
+# Loop 2, goes through array, looking for primes p.
+# When it finds them, marks multiplications of p as not-prime
+    ori     $s2 $zero, 1                    # Start at p=2 (increased in a sec)
+lp_loop2:
+    addiu   $s2, $s2, 1                     # p++
+    ori     $a0, $s2, 0                     # set param, p
+    ori     $a1, $s2, 0                     # set param, p
+    jal     mul                             # call mul(p,p)
+    slt     $t0, $v0, $s0                   # mul(p,p) < n
+    beq     $t0, $zero, lp_loop2_end        # if(mul(p,p) < n) exit loop 2
+
+    addu    $t0, $s2, $sp                   # Address for primes[p]
+    lw      $t0, 0($t0)                     # Load primes[p]
+    ori     $s1, $zero, 2                   # i = 2, in this order to blocking
+    bne     $t0, $zero, lp_loop2            # primes[0] == 0, loop again
 lp_loop2_1:
-    addu $a0, $t3, $zero            # set param, i
-    addu $a1, $t1, $zero            # set param, p
-    jal mul                         # call mul(i,p)
-    addiu $t4, $v0, 0               # store idx = mul(i,p)
-    slt $t5, $t4, $s0               # check (idx < n) == !(idx >= n)
-    bne $t5, $zero, lp_loop2_end    # if (idx>=n) break
-    sw $zero, 0($t4)                # primes[idx] = 0
-    addiu $t3, $t3, 1               # i++
-    j lp_loop2_1                    # restart while loop
-lp_loop2_end:
-    subiu $t1, $s0, 1               # i = n-1
+    ori     $a0, $s1, 0                     # set param, i
+    ori     $a1, $s2, 0                     # set param, p
+    jal     mul                             # call idx = mul(i,p)
+    slt     $t0, $v0, $s0                   # idx < n?
+    bne     $t0, $zero, lp_loop2_end        # if (idx>=n) exit inner loop
+    addu    $t0, $v0, $sp                   # Address for primes[idx]
+    sw      $zero, 0($t4)                   # primes[idx] = 0
+    addiu   $s1, $s1, 1                     # i++
+    j       lp_loop2_1                      # inner loop
+
+# Loop 3 starts at primes[n-1] and continues down until a prime is found
+    ori     $s1, $s0, -1                    # i = n-1
 lp_loop3:
-    slti $t2, $t1, 2                # i < 2
-    bne $t2, $zero, lp_loop3_end
-    slti $t3, $t2, 2
-    lw $t4, 0($t3)
-    beq $t4, $zero, lp_loop3_break  # if (!primes[i]) return
-    subiu $t1, $t1, 1               # i--
-lp_loop3_end:
-    addiu $v0, $zero, 0             # ret = 0
-    j largest_prime_exit
-lp_loop3_break:
-    addu $v0, $zero, $t1            # ret = i
-largest_prime_exit:
-    addiu $sp, $s1, 0               # restore stack pointer
-    jr $ra                          # return to caller
+    slti    $t0, $s1, 2                     # i < 2?
+    bne     $t0, $zer0, lp_return_zero      # if(i < 2) return 0     
+    addiu   $t0, $s1, $sp                   # Address for primes[i]
+    lw      $t0, 0($t0)                     # Load primes[i]
+    addiu   $s1, $s1, -1                    # i--
+    beq     $t0, $zero, lp_loop3            # if (!primes[i]) loop again
     
-exit:
+lp_loop3_break:
+    addiu   $v0, $s1, 1                     # ret=i+1 (i was decreased after load)
+    j largest_prime_exit
+lp_return_zero:
+    ori     $v0, $zero, 0                   # ret = 0
+largest_prime_exit:
+    addu    $sp, $sp, $s0                   # Remove primes array
+    sw      $ra, 0($sp)                     # Restore $ra
+    sw      $s0, 1($sp)                     # Restore $s0
+    sw      $s1, 2($sp)                     # Restore $s1
+    sw      $s2, 3($sp)                     # Restore $s2
+    addiu   $sp, $sp, 4                     # restore stack pointer
+    jr      $ra                             # return to caller
+    
+main:
+    addiu   $sp, $sp, -1                     # make room to save 1 32-bit word
+    sw      $ra, 0($sp)                     # Save return address
+
+    ori     $a0, $zero, 28                  # set n = 28
+    jal largest_prime                       # call largest_prime(n)
+        
+    lw      $ra, 0($sp)                     # restore return address
+    addiu   $sp, $sp, 1                     # restore stack
+    jr  
 
