@@ -1,1 +1,27 @@
 \section{Primtalsgenerator i MIPS assemblerkode}
+\subsection{Implementation}
+Vi har i implementationen af {\tt largest\_prime} valgt at gemme {\tt n}, {\tt
+i} og {\tt p} i henholdsvis {\tt \$s0}, {\tt \$s1} og{\tt \$s2}, idet vi kom ud
+for at alle disse variable skulle gemmes på tværs af et funktionskald (linje 24
+i c-kildekoden). Ved at kigge på {\tt mul} kunne vi dog have valgt at bruge {\tt
+\$t[0-2]} i stedet, idet {\tt mul} ikke overskriver disse registre, og på denne
+måde have undgået at skulle gemme værdierne på forhånd. Dette ville dog kunne
+have givet problemer, hvis implementationen af {\tt mul} senere ændrede sig.
+
+Flere steder i løbet af koden har vi forsøgt at optimere på den, for at få den
+til at køre på færre instruktioner eller undgå spildcykler. Dette udviser eksempelvis
+ved at de tjek vi har
+
+\subsection{Test}
+Vi har som sagt skrevet to udgaver af vores kode: En til standard mips
+arkitektur, med overlappende adresser og en til vores arkitektur hvor hvert
+32-bit ord har sin egen adresse. Disse udgaver er kun forskellige i det kode der
+har med hukommelsesadgang at gøre\footnote{Vi har verificeret at disse kun
+afviger her med blandt andet værktøjet diff}. Vi testede først vores kode i MARS
+og fik på den måde fjernet hvad vi formoder er alle bugs i koden. Dette blev
+gjort ved at køre koden igennem instruktion for instruktion og verificerede at
+alle registre indeholdt hvad de burde.
+
+Vi brugte herefter denne kode som reference i vores implementation af vores
+pipeline-arkitektur, idet vi på denne måde havde nem adgang til testcases som vi
+havde godt kendskab til.
