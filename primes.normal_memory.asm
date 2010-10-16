@@ -59,7 +59,7 @@ lp_loop2:
     addu    $t0, $t0, $t0                   # Address for primes[p]
     addu    $t0, $t0, $sp                   # Address for primes[p]
     lw      $t0, 0($t0)                     # Load primes[p]
-    ori     $s1, $zero, 2                   # i = 2, in this order to blocking
+    ori     $s1, $zero, 2                   # i = 2, in this order to avoid blocking
     beq     $t0, $zero, lp_loop2            # primes[0] == 0, loop again
 lp_loop2_1:
     ori     $a0, $s1, 0                     # set param, i
@@ -88,7 +88,7 @@ lp_loop3:
     beq     $t0, $zero, lp_loop3            # if (!primes[i]) loop again
     
 lp_loop3_break:
-    addiu   $v0, $s1, 1                     # ret=i+1 (i was decreased after load)
+    addiu   $v0, $s1, 1                     # ret=i+1 (i was decreased while loading from memory)
     j largest_prime_exit
 lp_return_zero:
     ori     $v0, $zero, 0                   # ret = 0

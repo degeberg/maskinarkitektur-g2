@@ -1,5 +1,5 @@
 init:
-    addiu   $sp, $zero, -1                  # initialize stack
+    ori     $sp, $zero, 0                   # initialize stack
     jal     main                            # call main
 init_loop:
     j       init_loop                       # infinite loop
@@ -35,7 +35,7 @@ largest_prime:
     ori     $s1, $zero, 2                   # i = 2
 lp_loop1:
     addu    $t0, $s1, $sp                   # Address for primes[i]
-    sw      $t0, 0($t0)                     # primes[i] = i
+    sw      $s1, 0($t0)                     # primes[i] = i
     addiu   $s1, $s1, 1                     # i += 1
     bne     $s0, $s1, lp_loop1              # if(n != 0) goto lp_loop1
 
