@@ -1,5 +1,5 @@
 init:
-#   ori     $sp, $zero, 0                   # initialize stack
+#    ori     $sp, $zero, 0                   # initialize stack (will be largest possible address, when used)
     jal     main                            # call main
 init_loop:
     j       init_loop                       # infinite loop
