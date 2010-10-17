@@ -1,0 +1,18 @@
+Dette skal gøres hvis opgaven skal være god nok til genaflevering:
+- Sandsynligvis intet, men:
+
+- Rapporten skal skrives færdig (begge delopgaver skal kigges igennem).
+- Der skal skrives afsnit i rapporten der beskriver hvad der mangler.
+
+
+
+Dette skal gøres, hvis opgaven skal godkendes:
+- Forwarding. (Der skal også laves forwarding for registerfilen. Se opgaveformuleringen samt forumet).
+    - Skal der laves forwarding af JAL/JRAL?
+- Hazard detection unit: Indsæt NOP/Bubbles, når hukommelsen ikke er klar.
+- Test principielt alting. Realistisk er dette sandsynligvis nok:
+    - At alle typer jumps gør som forventet, samt for en enkelt type, at de omgivende instruktioner gør som forventet.
+    - At forwarding virker som det skal.
+    - Test at primes.asm giver det rigtige resultat.
+
+
