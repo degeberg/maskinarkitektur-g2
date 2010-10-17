@@ -24,3 +24,16 @@ Bits fra Control:
     Bit 0: RegDst, er der specificeret dst register, eller er der kun to
            registre?
     Bit 1: Skal der skrives til et register?
+
+
+\subsection{Tests}
+Vi har hovedsageligt testet manuelt: Vi har kigget på en bestemt instruktion og
+manuelt set den køre hele vejen igennem pipelinen og verificeret at alle
+relevante signaler er sendt som forventet.
+
+Skriv noget om det kode vi har testet på.
+
+Skriv noget om de typer af instruktioner vi har testet på.
+
+Skriv noget om hvordan vi har testet data hazards. Control hazards var trivielle
+at teste: Lad en køre igennem, og se manuelt at den clearer alle de relevante registre.
