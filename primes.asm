@@ -1,5 +1,5 @@
 init:
-    ori     $sp, $zero, 0                   # initialize stack
+    ori     $sp, $zero, 0x400               # initialize stack
     jal     main                            # call main
 init_loop:
     j       init_loop                       # infinite loop
@@ -41,7 +41,7 @@ lp_loop1:
 
 # Loop 2, goes through array, looking for primes p.
 # When it finds them, marks multiplications of p as not-prime
-    ori     $s2 $zero, 1                    # Start at p=2 (increased in a sec)
+    ori     $s2, $zero, 1                    # Start at p=2 (increased in a sec)
 lp_loop2:
     addiu   $s2, $s2, 1                     # p++
     ori     $a0, $s2, 0                     # set param, p
