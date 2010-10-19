@@ -1,39 +1,46 @@
 \section{Pipeline-arkitektur}
 
-Bits fra Control:
+Vi tog vores enkeltcyklusarkitektur fra G1 og indførte de relevante
+pipelineregistre som subcircuits i Logisim. Herefter indførte vi en
+forwarding unit og en hazard detection unit.
 
-[SignedIMM]:
-    Bit 0:Er den eventuelle immediate-værdi signed eller unsigned (1=signed)
-[ALU]:
-    Bit 0: ALUSrc (kommer argument 2 til ALU fra Immediate?)
-    Bit 1-2: 00 = lw/sw, vil gerne have add operation
-             01 = bne/beq, vil gerne have sammenligning
-             10 = Regn det da selv ud ved at bruge funct!
-             11 = Immediate operation specificeret af IMM-OP fra instruktionen
-[Branching]:
-    Bit 0: Kan det forekomme, at der skal branches?
-    Bit 1-2: 00 = j/jal
-             01 = jr/jral
-             10-11 = beq/bne
-    Bit 3: Skal der linkes?
-[Memory]:
-    Bit 0: MemRead, skal der læses fra hukommelsen?
-    Bit 1: MemWrite, skal der skrives til hukommelsen?
-    Bit 2: MemToReg, skal der sendes noget fra memory til register?
-[RegisterWriting]:
-    Bit 0: RegDst, er der specificeret dst register, eller er der kun to
-           registre?
-    Bit 1: Skal der skrives til et register?
+Jumps er delvist blevet implementeret, men fungerer ikke korrekt. Vi er ikke
+helt sikre på om stalling virker korrekt. Forwarding burde dog virke.
+
+Den måde vi har testet arkitekturen er ved at skrive de enkelte instruktioner
+vi ønskede at teste for derefter at tjekke de enkelte wires og registre og se
+om de havde de rigtige værdier.
+
+%Bits fra Control:
+%
+%[SignedIMM]:
+%    Bit 0:Er den eventuelle immediate-værdi signed eller unsigned (1=signed)
+%[ALU]:
+%    Bit 0: ALUSrc (kommer argument 2 til ALU fra Immediate?)
+%    Bit 1-2: 00 = lw/sw, vil gerne have add operation
+%             01 = bne/beq, vil gerne have sammenligning
+%             10 = Regn det da selv ud ved at bruge funct!
+%             11 = Immediate operation specificeret af IMM-OP fra instruktionen
+%[Branching]:
+%    Bit 0: Kan det forekomme, at der skal branches?
+%    Bit 1-2: 00 = j/jal
+%             01 = jr/jral
+%             10-11 = beq/bne
+%    Bit 3: Skal der linkes?
+%[Memory]:
+%    Bit 0: MemRead, skal der læses fra hukommelsen?
+%    Bit 1: MemWrite, skal der skrives til hukommelsen?
+%    Bit 2: MemToReg, skal der sendes noget fra memory til register?
+%[RegisterWriting]:
+%    Bit 0: RegDst, er der specificeret dst register, eller er der kun to
+%           registre?
+%    Bit 1: Skal der skrives til et register?
 
 
-\subsection{Tests}
-Vi har hovedsageligt testet manuelt: Vi har kigget på en bestemt instruktion og
-manuelt set den køre hele vejen igennem pipelinen og verificeret at alle
-relevante signaler er sendt som forventet.
-
-Skriv noget om det kode vi har testet på.
-
-Skriv noget om de typer af instruktioner vi har testet på.
-
-Skriv noget om hvordan vi har testet data hazards. Control hazards var trivielle
-at teste: Lad en køre igennem, og se manuelt at den clearer alle de relevante registre.
+%\subsection{Tests}
+%Vi har hovedsageligt testet manuelt: Vi har kigget på en bestemt instruktion og
+%manuelt set den køre hele vejen igennem pipelinen og verificeret at alle
+%relevante signaler er sendt som forventet.
+%
+%Skriv noget om hvordan vi har testet data hazards. Control hazards var trivielle
+%at teste: Lad en køre igennem, og se manuelt at den clearer alle de relevante registre.

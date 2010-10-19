@@ -1,7 +1,7 @@
 \section{Primtalsgenerator i MIPS assemblerkode}
 \subsection{Implementation}
 Vi har i implementationen af {\tt largest\_prime} valgt at gemme {\tt n}, {\tt
-i} og {\tt p} i henholdsvis {\tt \$s0}, {\tt \$s1} og{\tt \$s2}, idet vi kom ud
+i} og {\tt p} i henholdsvis {\tt \$s0}, {\tt \$s1} og {\tt \$s2}, idet vi kom ud
 for at alle disse variable skulle gemmes på tværs af et funktionskald (linje 24
 i c-kildekoden). Ved at kigge på {\tt mul} kunne vi dog have valgt at bruge {\tt
 \$t[0-2]} i stedet, idet {\tt mul} ikke overskriver disse registre, og på denne

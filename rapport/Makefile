@@ -1,5 +1,5 @@
 GRAPHS=
-TARGET=g1.pdf
+TARGET=g2.pdf
 TEXFILES=*.tex
 HELPFILES=
 
