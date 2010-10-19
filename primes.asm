@@ -1,8 +1,8 @@
 init:
     ori     $sp, $zero, 0x400               # initialize stack
     jal     main                            # call main
-init_loop:
-    j       init_loop                       # infinite loop
+#init_loop:
+#    j       init_loop                       # infinite loop
 
 mul:
     ori     $v0, $zero, 0                   # res = 0
