@@ -1,2 +1,10 @@
-addiu $1, $1, 1
-addiu $2, $2, 2
+start:
+    jal LOL
+
+loop:
+    j loop
+
+
+LOL:
+    ori $v0, $0, 37
+    jr $31
