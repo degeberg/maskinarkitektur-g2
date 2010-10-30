@@ -9,8 +9,9 @@ måde have undgået at skulle gemme værdierne på forhånd. Dette ville dog kun
 have givet problemer, hvis implementationen af {\tt mul} senere ændrede sig.
 
 Flere steder i løbet af koden har vi forsøgt at optimere på den, for at få den
-til at køre på færre instruktioner eller undgå spildcykler. Dette udviser eksempelvis
-ved at de tjek vi har
+til at køre på færre instruktioner eller undgå spildcykler. Dette udvises eksempelvis
+ved at vi de fleste steder har optimeret {\tt j} instruktionerne væk fra vores
+loops.
 
 \subsection{Test}
 Vi har som sagt skrevet to udgaver af vores kode: En til standard mips
