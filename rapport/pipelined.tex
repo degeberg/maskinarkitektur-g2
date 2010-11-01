@@ -24,7 +24,19 @@ ud af at forsøge helt at undgå strukturelle hazards, hvorfor disse ikke er
 relevante for vores projekt.
 
 \subsection{Data hazards}
+
 \subsection{Control hazards}
+Control hazards forekommer ved branches. Da vi ikke på forhånd ved om vi skal hoppe
+eller fortsætte ved en branch, risikerer vi at instruktioner der allerede er i vores
+pipeline ikke skal udføres. Det går for langsomt at stalle indtil branchen er færdig,
+og den optimale løsning, branch prediction, er for avanceret til vores opgave. Derfor
+smider vi bare de ugyldige instruktioner væk, hvis det viser sig at et branch bliver taget.
+I vores arkitektur forekommer control hazards også ved jumps, da vi ikke holder styr på hvor
+der bliver hoppet til.
+
+Pipelinen bliver clearet ved at sætte ClearPipe til 1, som sætter registrene OP i IF/ID, Branching, Memory og Register
+ID/EX, samt registrene Branching, Memory og RegWrite i EX/MEM til 0. Derudover sætter den PC til værdien
+fra jump- eller branchinstruktionen. 
 
 \subsection{Tests}
 Vi har testet på tre måder:
