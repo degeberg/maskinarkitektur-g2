@@ -17,6 +17,14 @@ linjer i en PLA.
 
 \subsection{Pipeline-registre}
 
+Vi har implementeret de pipeline-registre der er omtalt i bogen ved hjælp af
+subcircuits i Logisim: IF/ID, ID/EX, EX/MEM, MEM/WB. Hvert register modtager
+de informationer der skal bruges i senere pipeline-stadier.
+
+IF/ID, ID/EX og EX/MEM modtager en ClearPipe-bit der indikerer om visse
+registre i pipeline-registerbanken skal nulstilles. IF/ID og ID/EX modtager
+endvidere en Stall-bit der udskyder skrivningen til registre.
+
 \subsection{Typer af hazards}
 I bogen gennemgås tre typer hazard: Data hazards, control hazards og
 strukturelle hazards. Som der også gennemgås i bogen er der i mips gjort en del
@@ -24,6 +32,30 @@ ud af at forsøge helt at undgå strukturelle hazards, hvorfor disse ikke er
 relevante for vores projekt.
 
 \subsection{Data hazards}
+Der er som udgangspunkt to typer data hazards som er relevante for dette projekt:
+
+Den ene hazard er når skal bruges et resultat fra ALU'en, før at dette resultat endnu er skrevet
+til registerfilen. Dette løses ved hjælp af forwarding.
+
+Den anden hazard er når der skal bruges et resultat fra hukommelsen i en af de
+to efterfølgende instruktioner. Hvis det forekommer i instruktionen lige efter
+kan dette ikke løses ved hjælp af forwarding, hvorfor at pipelinen stalles en
+enkelt cykel, men hvis resultatet først skal bruges to instruktioner senere kan
+det løses udelukkende ved hjælp af forwarding.
+
+Forwarding er konkret implementeret præcis som beskrevet i bogen: Der tjekkes
+for om der bruges de samme registre, og om disse registre ikke er register {\tt
+\$0} - hvis ikke de er, så bruges det overførte resultat i stedet for det hentet
+fra registerfilen. Der kan dog bådes overføres resultat fra både {\tt 
+MEM}-stadiet og {\tt WB}-stadiet.
+
+Den anden hazard kan som beskrevet kun løses ved at stalle pipelinen i en enkelt
+cykel. Dette er konkret implementeret ved at der tjekkes for om instruktionen 
+som er i {\tt EX}-stadiet læser fra hukommelsen og skriver til et register som 
+skal bruges af instruktionen i {\tt ID}-stadiet. Hvis det er tilfældet, så 
+forhindres at værdierne i {\tt PC} og {\tt IF/ID} bliver ændret (medmindre der 
+også er en control hazard, hvorved de i stedet bliver clearet) og
+control-bitsene i {\tt ID/EX} bliver clearet.
 
 \subsection{Control hazards}
 Control hazards forekommer ved branches. Da vi ikke på forhånd ved om vi skal hoppe
