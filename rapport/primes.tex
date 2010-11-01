@@ -14,15 +14,7 @@ ved at vi de fleste steder har optimeret {\tt j} instruktionerne væk fra vores
 loops.
 
 \subsection{Test}
-Vi har som sagt skrevet to udgaver af vores kode: En til standard mips
-arkitektur, med overlappende adresser og en til vores arkitektur hvor hvert
-32-bit ord har sin egen adresse. Disse udgaver er kun forskellige i det kode der
-har med hukommelsesadgang at gøre\footnote{Vi har verificeret at disse kun
-afviger her med blandt andet værktøjet diff}. Vi testede først vores kode i MARS
-og fik på den måde fjernet hvad vi formoder er alle bugs i koden. Dette blev
-gjort ved at køre koden igennem instruktion for instruktion og verificerede at
-alle registre indeholdt hvad de burde.
-
-Vi brugte herefter denne kode som reference i vores implementation af vores
-pipeline-arkitektur, idet vi på denne måde havde nem adgang til testcases som vi
-havde godt kendskab til.
+Vi testede først vores kode i MARS og fik på den måde
+fjernet hvad vi formoder er alle bugs i koden. Dette blev gjort ved at køre
+koden igennem instruktion for instruktion og verificerede at alle registre
+indeholdt hvad de burde.
