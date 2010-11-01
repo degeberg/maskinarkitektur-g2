@@ -24,6 +24,22 @@ ud af at forsøge helt at undgå strukturelle hazards, hvorfor disse ikke er
 relevante for vores projekt.
 
 \subsection{Data hazards}
+Der som udgangspunkt to typer data hazards som er relevante for dette projekt:
+
+Den ene hazard er når skal bruges et resultat fra ALU'en, før at dette resultat endnu er skrevet
+til registerfilen. Dette løses ved hjælp af forwarding.
+
+Den anden hazard er når der skal bruges et resultat fra hukommelsen i en af de
+to efterfølgende instruktioner. Hvis det forekommer i instruktionen lige efter
+kan dette ikke løses ved hjælp af forwarding, hvorfor at pipelinen stalles en
+enkelt cykel, men hvis resultatet først skal bruges to instruktioner senere kan
+det løses udelukkende ved hjælp af forwarding.
+
+Forwarding er konkret implementeret præcis som beskrevet i bogen: Der tjekkes
+for om der bruges de samme registre, og om disse registre ikke er register {\tt
+\$0} - hvis ikke de er, så bruges det overførte resultat i stedet for det hentet
+fra registerfilen. Der kan dog bådes overføres resultat fra 
+
 \subsection{Control hazards}
 
 \subsection{Tests}
