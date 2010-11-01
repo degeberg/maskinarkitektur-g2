@@ -46,7 +46,16 @@ det løses udelukkende ved hjælp af forwarding.
 Forwarding er konkret implementeret præcis som beskrevet i bogen: Der tjekkes
 for om der bruges de samme registre, og om disse registre ikke er register {\tt
 \$0} - hvis ikke de er, så bruges det overførte resultat i stedet for det hentet
-fra registerfilen. Der kan dog bådes overføres resultat fra 
+fra registerfilen. Der kan dog bådes overføres resultat fra både {\tt 
+MEM}-stadiet og {\tt WB}-stadiet.
+
+Den anden hazard kan som beskrevet kun løses ved at stalle pipelinen i en enkelt
+cykel. Dette er konkret implementeret ved at der tjekkes for om instruktionen 
+som er i {\tt EX}-stadiet læser fra hukommelsen og skriver til et register som 
+skal bruges af instruktionen i {\tt ID}-stadiet. Hvis det er tilfældet, så 
+forhindres at værdierne i {\tt PC} og {\tt IF/ID} bliver ændret (medmindre der 
+også er en control hazard, hvorved de i stedet bliver clearet) og
+control-bitsene i {\tt ID/EX} bliver clearet.
 
 \subsection{Control hazards}
 
