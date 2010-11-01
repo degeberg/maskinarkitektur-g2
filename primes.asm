@@ -1,5 +1,5 @@
 init:
-#    ori     $sp, $zero, 0                   # initialize stack to  the whole memory.
+    ori     $sp, $zero, 0                   # initialize stack to  the whole memory.
                                             # When you push something to the stack
                                             # it will be put at the largest possible address)
     jal     main                            # call main
