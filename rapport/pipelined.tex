@@ -13,7 +13,7 @@ De ekstra instruktioner vi har tilføjet er:
 \end{itemize}
 
 I alt understøtter vi 2 instruktioner der ikke er en del af opgaven (nor, jral, bne), men som kun kræver ekstra
-linjer i en PLA. 
+linjer i PLAerne i Control og ALU Control. 
 
 \subsection{Pipeline-registre}
 
@@ -23,7 +23,8 @@ de informationer der skal bruges i senere pipeline-stadier.
 
 IF/ID, ID/EX og EX/MEM modtager en ClearPipe-bit der indikerer om visse
 registre i pipeline-registerbanken skal nulstilles. IF/ID og ID/EX modtager
-endvidere en Stall-bit der udskyder skrivningen til registre.
+endvidere en StallPipe-bit, der i IF/ID forhindrer skrivning og i ID/EX sætter
+alle control-bits til 0.
 
 \subsection{Typer af hazards}
 I bogen gennemgås tre typer hazard: Data hazards, control hazards og
