@@ -17,6 +17,14 @@ linjer i en PLA.
 
 \subsection{Pipeline-registre}
 
+Vi har implementeret de pipeline-registre der er omtalt i bogen ved hjælp af
+subcircuits i Logisim: IF/ID, ID/EX, EX/MEM, MEM/WB. Hvert register modtager
+de informationer der skal bruges i senere pipeline-stadier.
+
+IF/ID, ID/EX og EX/MEM modtager en ClearPipe-bit der indikerer om visse
+registre i pipeline-registerbanken skal nulstilles. IF/ID og ID/EX modtager
+endvidere en Stall-bit der udskyder skrivningen til registre.
+
 \subsection{Typer af hazards}
 I bogen gennemgås tre typer hazard: Data hazards, control hazards og
 strukturelle hazards. Som der også gennemgås i bogen er der i mips gjort en del
