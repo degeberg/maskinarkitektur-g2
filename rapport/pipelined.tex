@@ -34,7 +34,7 @@ relevante for vores projekt.
 \subsection{Data hazards}
 Der er som udgangspunkt to typer data hazards som er relevante for dette projekt:
 
-Den ene hazard er når skal bruges et resultat fra ALU'en, før at dette resultat endnu er skrevet
+Den ene hazard er når der skal bruges et resultat fra ALU'en, før at dette resultat endnu er skrevet
 til registerfilen. Dette løses ved hjælp af forwarding.
 
 Den anden hazard er når der skal bruges et resultat fra hukommelsen i en af de
@@ -56,6 +56,10 @@ skal bruges af instruktionen i {\tt ID}-stadiet. Hvis det er tilfældet, så
 forhindres at værdierne i {\tt PC} og {\tt IF/ID} bliver ændret (medmindre der 
 også er en control hazard, hvorved de i stedet bliver clearet) og
 control-bitsene i {\tt ID/EX} bliver clearet.
+
+Det skal desuden nævnes, at vi har løst at registerfilen ikke kan se ændringer fra
+samme clockcyklus, ved at sætte den til at opdatere på falling edge af clocken.
+Dermed behøver vi ikke at forwarde over registerfilen.
 
 \subsection{Control hazards}
 Control hazards forekommer ved branches. Da vi ikke på forhånd ved om vi skal hoppe
